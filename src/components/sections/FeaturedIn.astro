@@ -1,0 +1,83 @@
+---
+import coindesk from '../../assets/press/coindesk.svg?raw';
+import bitcoinMagazine from '../../assets/press/bitcoin-magazine.svg?raw';
+import forbes from '../../assets/press/forbes.svg?raw';
+import businessInsider from '../../assets/press/business-insider.svg?raw';
+import yahooFinance from '../../assets/press/yahoo-finance.svg?raw';
+
+/**
+ * "As featured in".
+ *
+ * The eyebrow is not on its own row: it is the first item in the same horizontal
+ * row as the five logos, distributed with space-between. The design's stored
+ * itemSpacing of 48 is a minimum that space-between overrides, so the gaps are
+ * computed rather than fixed.
+ *
+ * Both rules are full-bleed 1440 while the row itself is inset by 120.
+ *
+ * The section is height-locked at 336 while its content needs 364, so the drawn
+ * bottom padding renders as 92 rather than the declared 120. Built as it renders.
+ *
+ * Logo ink is driven by currentColor so all five share one grey; CoinDesk's own
+ * geometry is otherwise a shade darker than the rest.
+ *
+ * At 375 the row becomes a HORIZONTAL SCROLL REGION: the design marks it so, and
+ * the six items measure 1184 inside a 375 frame, leaving 809 to scroll. The gaps
+ * are a real fixed 80 there rather than a space-between remainder, the items are
+ * top-aligned instead of centred, and every logo is drawn ~1.28x LARGER than on
+ * desktop, which is what causes the overflow in the first place.
+ *
+ * The scroll sits on the row rather than on its parent. The design flags the
+ * parent, but the two rules are 375-wide children of it, so scrolling there would
+ * carry them off-screen with the logos. Keeping the rules out of the scrolling
+ * flow is the only reading that matches how it looks.
+ *
+ * The scrollbar is hidden because the design draws none, so the region carries
+ * tabindex and a label to stay operable without it.
+ */
+// wm/hm are the 375 sizes, w/h the 1440 ones. They ride in as custom properties
+// so one static pair of utilities can switch them at the breakpoint.
+const logos = [
+  { name: 'CoinDesk', svg: coindesk, w: 118, h: 22, wm: 150, hm: 28 },
+  { name: 'Bitcoin Magazine', svg: bitcoinMagazine, w: 119, h: 22, wm: 152, hm: 28 },
+  { name: 'Forbes', svg: forbes, w: 87, h: 22, wm: 111, hm: 28 },
+  { name: 'Business Insider', svg: businessInsider, w: 85, h: 28, wm: 110, hm: 36 },
+  { name: 'Yahoo Finance', svg: yahooFinance, w: 76, h: 28, wm: 97, hm: 36 },
+];
+---
+
+<section class="overflow-hidden bg-bg-default pt-20 pb-20 lg:pt-30 lg:pb-23">
+  {/* The rules are 0-height lines in the design, so they are positioned rather
+      than given borders -- a border would add its own row to the section height. */}
+  <div class="relative py-12">
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-x-0 top-0 h-px bg-border-default/50"
+    ></span>
+
+    <div
+      role="region"
+      aria-label="Press coverage"
+      tabindex="0"
+      class="mx-auto flex w-full max-w-[1440px] flex-nowrap items-start gap-20 overflow-x-auto px-6 [scrollbar-width:none] lg:flex-wrap lg:items-center lg:justify-between lg:gap-8 lg:overflow-x-visible xl:px-30 [&::-webkit-scrollbar]:hidden"
+    >
+      <p class="shrink-0 text-lg text-body-alt">As featured in</p>
+      {
+        logos.map((l) => (
+          <span
+            class="inline-flex h-[var(--hm)] w-[var(--wm)] shrink-0 items-center text-body-default lg:h-[var(--h)] lg:w-[var(--w)]"
+            style={`--w:${l.w}px;--h:${l.h}px;--wm:${l.wm}px;--hm:${l.hm}px`}
+            role="img"
+            aria-label={l.name}
+            set:html={l.svg}
+          />
+        ))
+      }
+    </div>
+
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-border-default/50"
+    ></span>
+  </div>
+</section>

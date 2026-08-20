@@ -1,0 +1,153 @@
+---
+import Tag from '../Tag.astro';
+
+/**
+ * The stats strip.
+ *
+ * The grid TRANSPOSES between breakpoints. At 1440 it is five columns of
+ * value-over-label; at 375 it is five rows of value-beside-label. The mapping is
+ * 1:1 and in the same order, so one set of cells serves both: each cell is a row
+ * on mobile and a column from lg up.
+ *
+ * The cells sit on a 0.5px hairline grid. The design draws that grid by giving
+ * cells 1, 3 and 5 left+right borders while cells 2 and 4 carry none, so every
+ * column edge is painted exactly once. Porting that ownership trick per cell is
+ * fragile -- reordering a cell would silently drop or double a rule -- so the
+ * rules are drawn once here as their own elements. The rendered result is
+ * identical, and it also normalises two half-pixel artifacts the mobile frame
+ * carries: its single vertical alternates between x171.0 and x171.5 depending on
+ * the row, and each horizontal is drawn as two halves at different y. Both are
+ * bookkeeping side effects of per-cell ownership, not intent, so each is built as
+ * one continuous rule.
+ *
+ * Mobile has NO outer border: rules appear only between rows and between the two
+ * columns. Desktop keeps its six verticals including the outer two.
+ *
+ * The dots are not floating: each centres on the intersection of the vertical and
+ * a horizontal. The mobile frame places them at x172 against a 171.5 rule; they
+ * are snapped onto the rule here, since a half-pixel offset reads as a mistake.
+ *
+ * The desktop container is 1239 wide, deliberately wider than the page's usual
+ * 1200 column, so the section's own side padding is overridden by centring.
+ */
+
+interface Cell {
+  value: string;
+  unit?: string;
+  label: string;
+  valueTag?: { label: string; dot: boolean };
+  labelTag?: { label: string; labelSm: string; dot: boolean };
+}
+
+// Cell 5's label reads "Pool fee", the same as cell 3. Transcribed as drawn at
+// both breakpoints; the duplication is in the design, not introduced here.
+const cells: Cell[] = [
+  { value: '12', label: 'Blocks found' },
+  {
+    value: '957,431',
+    label: 'Latest block',
+    // The design abbreviates this tag at 375 and spells it out at 1440.
+    labelTag: { label: '3 hours ago', labelSm: '3 hrs ago', dot: true },
+  },
+  { value: '1%', label: 'Pool fee' },
+  { value: 'Slice', label: 'Payment scheme', valueTag: { label: 'FPPS available', dot: false } },
+  { value: '13.74', unit: 'EH/s', label: 'Pool fee' },
+];
+
+const valueType =
+  'text-lg font-bold text-header-default lg:font-heading lg:text-2xl lg:font-semibold lg:tracking-[-1px]';
+
+// Mobile row boundaries, and the desktop row boundary.
+const rowRules = [76, 152, 228, 304];
+---
+
+<section class="overflow-hidden bg-bg-default px-4 py-20 lg:px-0">
+  <div class="relative mx-auto w-full max-w-[343px] lg:max-w-[1239px] lg:px-6 xl:px-0">
+    <div class="grid grid-cols-1 lg:grid-cols-5">
+      {
+        cells.map((c) => (
+          <div class="flex lg:flex-col">
+            {/* value: 76 tall beside the label on mobile, 84 above it from lg */}
+            <div class="flex h-[76px] w-1/2 items-start px-2 py-6 lg:h-[84px] lg:w-auto lg:p-6">
+              <div class="flex items-center gap-1">
+                <span class={valueType}>{c.value}</span>
+                {/* The design sets the separating space one step larger, which
+                    overflows this row by 4px; matched to the value instead. */}
+                {c.unit && (
+                  <span class="text-sm font-normal text-body-alt lg:text-base lg:font-medium">
+                    &nbsp;{c.unit}
+                  </span>
+                )}
+                {c.valueTag && <Tag size="medium" dot={c.valueTag.dot} label={c.valueTag.label} />}
+              </div>
+            </div>
+
+            {/* label: vertically centred on mobile, top-aligned from lg */}
+            <div class="flex h-[76px] w-1/2 items-center px-2 py-6 lg:h-[72px] lg:w-auto lg:items-start lg:p-6">
+              <div class="flex items-center gap-1">
+                <span class="text-sm text-body-alt lg:text-base">{c.label}</span>
+                {c.labelTag && (
+                  <Tag size="medium" dot={c.labelTag.dot}>
+                    <span class="lg:hidden">{c.labelTag.labelSm}</span>
+                    <span class="hidden lg:inline">{c.labelTag.label}</span>
+                  </Tag>
+                )}
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    {/* One vertical between the two mobile columns; six column edges from lg. */}
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-y-0 left-1/2 w-px bg-border-default/50 lg:hidden"
+    ></span>
+    {
+      [0, 1, 2, 3, 4, 5].map((n) => (
+        <span
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-y-0 hidden w-px bg-border-default/50 lg:block"
+          style={`left: ${(n * 100) / 5}%`}
+        />
+      ))
+    }
+
+    {/* Four rules between the five mobile rows; one between the two desktop rows. */}
+    {
+      rowRules.map((y) => (
+        <span
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-x-0 h-px bg-border-default/50 lg:hidden"
+          style={`top: ${y}px`}
+        />
+      ))
+    }
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-x-0 top-[84px] hidden h-px bg-border-default/50 lg:block"
+    ></span>
+
+    {/* Intersection dots: on the single vertical at 375, on the four internal
+        column edges from lg. */}
+    {
+      rowRules.map((y) => (
+        <span
+          aria-hidden="true"
+          class="pointer-events-none absolute size-1 rounded-full bg-icon-alt lg:hidden"
+          style={`left: calc(50% - 2px); top: ${y - 2}px`}
+        />
+      ))
+    }
+    {
+      [1, 2, 3, 4].map((n) => (
+        <span
+          aria-hidden="true"
+          class="pointer-events-none absolute top-[82px] hidden size-1 rounded-full bg-icon-alt lg:block"
+          style={`left: calc(${(n * 100) / 5}% - 2px)`}
+        />
+      ))
+    }
+  </div>
+</section>

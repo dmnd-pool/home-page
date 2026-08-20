@@ -1,0 +1,36 @@
+---
+/**
+ * Solar `Hamburger Menu`, 16x16. Three filled bars; ink comes from currentColor
+ * so the dark pill it sits inside can drive it.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<svg
+  width="16"
+  height="16"
+  viewBox="0 0 16 16"
+  fill="none"
+  aria-hidden="true"
+  class={className}
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    fill-rule="evenodd"
+    clip-rule="evenodd"
+    d="M13.8333 4.6665C13.8333 4.94265 13.6094 5.1665 13.3333 5.1665L2.66658 5.1665C2.39044 5.1665 2.16658 4.94265 2.16658 4.6665C2.16658 4.39036 2.39044 4.1665 2.66658 4.1665L13.3333 4.1665C13.6094 4.1665 13.8333 4.39036 13.8333 4.6665Z"
+    fill="currentColor"></path>
+  <path
+    fill-rule="evenodd"
+    clip-rule="evenodd"
+    d="M13.8333 8C13.8333 8.27614 13.6094 8.5 13.3333 8.5L2.66658 8.5C2.39044 8.5 2.16658 8.27614 2.16658 8C2.16658 7.72386 2.39044 7.5 2.66658 7.5L13.3333 7.5C13.6094 7.5 13.8333 7.72386 13.8333 8Z"
+    fill="currentColor"></path>
+  <path
+    fill-rule="evenodd"
+    clip-rule="evenodd"
+    d="M13.8333 11.3335C13.8333 11.6096 13.6094 11.8335 13.3333 11.8335L2.66658 11.8335C2.39044 11.8335 2.16658 11.6096 2.16658 11.3335C2.16658 11.0574 2.39044 10.8335 2.66658 10.8335L13.3333 10.8335C13.6094 10.8335 13.8333 11.0574 13.8333 11.3335Z"
+    fill="currentColor"></path>
+</svg>

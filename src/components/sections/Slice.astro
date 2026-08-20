@@ -1,0 +1,113 @@
+---
+import Button from '../Button.astro';
+import ArrowRightUp from '../icons/ArrowRightUp.astro';
+import minerIcon from '../../assets/slice/miner.svg?raw';
+import trackedIcon from '../../assets/slice/tracked.svg?raw';
+import coinIcon from '../../assets/slice/coin.svg?raw';
+
+/**
+ * "Slice, payouts you can verify".
+ *
+ * Same nested track as the block-choice section: two full-bleed hairlines bracket
+ * it, and the 1200 track carries left and right hairlines in black at 20% rather
+ * than the usual border grey.
+ *
+ * The inner 1042 column is centred inside the 1200 track and overruns its gutters,
+ * so it must not be built as padding.
+ *
+ * The heading has three runs in the file, but the middle one is a single space,
+ * so two spans reproduce it exactly.
+ *
+ * Unlike the efficiency cards, these three cards DO carry a real 0.5px border on
+ * all four sides, and they sit on the secondary background rather than the default.
+ *
+ * At 375 the three cards stack and "Learn how slice works" leaves the header to
+ * sit below them, so a grid carries both arrangements without duplicating the
+ * link. The cards also stop being a fixed 236: each one hugs its own copy there
+ * (236 / 256.01 / 264), with a real 64 between the icon and the text rather than
+ * the space-between remainder desktop relies on.
+ */
+const cards = [
+  {
+    icon: minerIcon,
+    name: 'Miner',
+    title: 'You mine',
+    body: 'Your workers submit valid shares to DMND over encrypted Stratum V2.',
+    weight: 'font-semibold',
+  },
+  {
+    icon: trackedIcon,
+    name: 'Share tracking',
+    title: 'Every share is tracked',
+    body: 'Each valid share is logged and assigned to your miner profile, verifiable, not a black box.',
+    weight: 'font-semibold',
+  },
+  {
+    icon: coinIcon,
+    name: 'Payout',
+    title: 'Block found, payout calculated',
+    // The design sets this one in Medium where the other two are SemiBold.
+    body: 'When DMND finds a block, rewards are split by share contribution under SLICE.',
+    weight: 'font-medium',
+  },
+];
+---
+
+<section class="relative overflow-hidden bg-bg-default px-6 py-20 lg:px-0 lg:py-30">
+  <span
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 top-20 h-px bg-border-default/50 lg:top-30"
+  ></span>
+
+  <div
+    class="mx-auto w-full max-w-[327px] px-3 shadow-[inset_0.5px_0_0_0_var(--color-btn-border),inset_-0.5px_0_0_0_var(--color-btn-border)] lg:max-w-[1200px] lg:px-6 xl:px-0"
+  >
+    <div
+      class="mx-auto grid w-full max-w-[303px] gap-[23px] py-12 lg:max-w-[1042px] lg:grid-cols-[1fr_auto] lg:items-center lg:gap-10 lg:py-16"
+    >
+      <div class="flex flex-col gap-1 lg:row-start-1">
+          <h2 class="font-heading text-3xl font-medium text-header-alt">
+            Slice,<span class="text-body-alt"> payouts you can verify</span>
+          </h2>
+          <p class="w-full max-w-[836px] text-base text-body-alt">
+            Purpose-built to guarantee every miner receives their full earnings.
+          </p>
+      </div>
+
+      <div class="flex flex-col gap-2 lg:col-span-2 lg:row-start-2 lg:flex-row">
+        {
+          cards.map((c) => (
+            <div class="flex w-full flex-col gap-16 bg-bg-primary p-6 shadow-[inset_0_0_0_0.5px_var(--color-border-default)] lg:h-[236px] lg:flex-1 lg:justify-between lg:gap-0">
+              <span
+                class="inline-flex size-13 shrink-0"
+                role="img"
+                aria-label={c.name}
+                set:html={c.icon}
+              />
+              <div class="flex flex-col gap-1">
+                <h3 class:list={['text-lg text-header-default', c.weight]}>{c.title}</h3>
+                <p class="text-sm text-body-alt">{c.body}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <Button
+        variant="tertiary"
+        size="default"
+        href="#slice"
+        link
+        label="Learn how slice works"
+        class="lg:col-start-2 lg:row-start-1 lg:justify-self-end"
+      >
+        <ArrowRightUp />
+      </Button>
+    </div>
+  </div>
+
+  <span
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 bottom-20 h-px bg-border-default/50 lg:top-[592px] lg:bottom-auto"
+  ></span>
+</section>

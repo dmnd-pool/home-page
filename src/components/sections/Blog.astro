@@ -1,0 +1,79 @@
+---
+import Button from '../Button.astro';
+import AltArrowRight from '../icons/AltArrowRight.astro';
+import ArrowRightUp from '../icons/ArrowRightUp.astro';
+import blog1 from '../../assets/blog/blog-1.jpg';
+import blog2 from '../../assets/blog/blog-2.jpg';
+import blog3 from '../../assets/blog/blog-3.jpg';
+
+/**
+ * "From the blog".
+ *
+ * The content column is 1208 inside a 1200 content box and is LEFT-aligned, so it
+ * overruns the right gutter by 8: the gutters are 120 left, 112 right. That is the
+ * only asymmetric column on the page, so it is built as a left pad plus a fixed
+ * width rather than as a centred container.
+ *
+ * The cards sit on the secondary background with a real hairline on all four
+ * sides, unlike the efficiency cards whose borders are switched off.
+ *
+ * Each card's "Read" underline spans the label AND the arrow, so it is a rule on
+ * the whole link rather than a text-decoration.
+ *
+ * At 375 the cards stack and "Read all blogs" leaves the header to sit centred
+ * below them. A grid carries both arrangements from one set of nodes: the button
+ * is the third row on mobile and shares row one with the heading from lg up, so
+ * the link is never duplicated just to move it.
+ */
+const posts = [
+  { img: blog1, title: 'Block 955,318: the first Stratum V2 block in Bitcoin history', date: 'July 2026' },
+  { img: blog2, title: 'Block 955,318: the first Stratum V2 block in Bitcoin history', date: 'July 2026' },
+  { img: blog3, title: 'Block 955,318: the first Stratum V2 block in Bitcoin history', date: 'July 2026' },
+];
+---
+
+<section class="overflow-hidden bg-bg-default px-4 py-20 lg:px-6 lg:py-30 xl:pr-28 xl:pl-30">
+  <div
+    class="mx-auto grid w-full max-w-[343px] gap-6 lg:max-w-[1208px] lg:grid-cols-[1fr_auto] lg:items-center"
+  >
+    <h2 class="font-heading text-4xl text-body-alt lg:row-start-1">
+      From the <span class="font-medium text-header-alt">blog</span>
+    </h2>
+
+    <div class="flex flex-col gap-1 lg:col-span-2 lg:row-start-2 lg:flex-row">
+      {
+        posts.map((p) => (
+          <article class="flex w-full flex-col bg-bg-primary shadow-[inset_0_0_0_0.5px_var(--color-border-default)] lg:flex-1">
+            <img
+              src={p.img.src}
+              alt=""
+              aria-hidden="true"
+              width="400"
+              height="220"
+              class="h-[220px] w-full bg-bg-secondary object-cover"
+            />
+            <div class="flex flex-col gap-4 p-6">
+              <div class="flex flex-col gap-1">
+                <h3 class="font-heading text-xl leading-8 text-body-default">{p.title}</h3>
+                <p class="text-sm text-body-alt">{p.date}</p>
+              </div>
+              <Button variant="tertiary" size="default" href="#post" link label="Read">
+                <ArrowRightUp />
+              </Button>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <Button
+      variant="secondary"
+      size="default"
+      href="#blog"
+      label="Read all blogs"
+      class="justify-self-center lg:col-start-2 lg:row-start-1 lg:justify-self-end"
+    >
+      <AltArrowRight />
+    </Button>
+  </div>
+</section>

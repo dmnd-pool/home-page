@@ -1,0 +1,65 @@
+---
+import backdrop from '../../assets/art-dashboard-backdrop.webp';
+import screenshot from '../../assets/dashboard-screenshot.png';
+import screenshotMobile from '../../assets/dashboard-screenshot-mobile.png';
+
+/**
+ * The product preview.
+ *
+ * The section paints stacked fills -- a solid base, the halftone artwork scaled to
+ * cover, and at 1440 a 35% black scrim -- with the preview card above all of them,
+ * so the screenshot keeps its own brightness while the artwork behind it is
+ * dimmed. THE SCRIM DOES NOT EXIST AT 375: the mobile frame has two fills, not
+ * three, so the photo renders unmuted there.
+ *
+ * Desktop: the card is 1200 wide but its content only 1198.08, leaving a 1.92px
+ * gutter on the right where the dimmed artwork shows through, and the content is
+ * 686.4 tall against a 667 opening so the last 19.4px fall past the section edge.
+ * Mobile drops both wrapper frames, so there is no gutter and the card itself
+ * clips its content.
+ *
+ * Both crops are exported with their clipping already applied, which is why each
+ * is placed at its exported size with no wrapper trimming it. The mobile card
+ * overruns the section by 0.67px at the bottom and the section's own overflow
+ * takes care of that, exactly as Figma does.
+ *
+ * The card carries a 0.5px bottom stroke in the design that never reaches the
+ * screen: the frame paints its stroke before its children, and the overflowing
+ * content covers that edge. Nothing is drawn for it here.
+ */
+---
+
+<section class="relative h-[345.33px] overflow-hidden bg-bg-default lg:h-[800px]">
+  <img
+    src={backdrop.src}
+    alt=""
+    aria-hidden="true"
+    width="1672"
+    height="941"
+    loading="lazy"
+    class="pointer-events-none absolute inset-0 h-full w-full object-cover select-none"
+  />
+  {/* The scrim is a desktop-only fill. */}
+  <span aria-hidden="true" class="pointer-events-none absolute inset-0 hidden bg-black/35 lg:block"
+  ></span>
+
+  <img
+    src={screenshotMobile.src}
+    alt="The DMND dashboard showing live hashrate, worker connection details and combined hashrate across subaccounts."
+    width="323"
+    height="217"
+    loading="lazy"
+    class="absolute top-[129px] left-[26px] h-[217px] w-[323px] max-w-none lg:hidden"
+  />
+
+  <div class="absolute inset-x-0 top-[133px] mx-auto hidden w-full max-w-[1200px] lg:block">
+    <img
+      src={screenshot.src}
+      alt="The DMND dashboard showing live hashrate, worker connection details and combined hashrate across subaccounts."
+      width="1198"
+      height="667"
+      loading="lazy"
+      class="h-[667px] w-[1198.08px] max-w-none"
+    />
+  </div>
+</section>

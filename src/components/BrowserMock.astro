@@ -1,0 +1,105 @@
+---
+/**
+ * The skeleton browser window used by every card of the mempool section.
+ *
+ * All five instances share one structure; what changes is the grey the skeleton
+ * takes and which single element is tinted blue. The blue walks through the UI
+ * card by card -- first tile, second tile, third tile, then up into the sidebar
+ * -- so scrolling the column reads as a tour of the interface.
+ *
+ * Every stroke is a fraction of a pixel because the whole mockup is the dashboard
+ * artwork scaled to 83.2%. The chrome bar's own fill and both panels' white fills
+ * are switched off in the design, so the root colour shows through; the blue
+ * tile's blue stroke is switched off too.
+ *
+ * At 375 the design draws this at EXACTLY half size -- every box, gap and stroke
+ * weight is 0.5x its desktop value, checked one by one. A transform reproduces
+ * that exactly and keeps the sub-pixel strokes in proportion, where re-deriving
+ * a second set of numbers would drift. The outer element carries the laid-out
+ * size, since a transform does not affect layout.
+ *
+ * The scale is written as `max-lg:` rather than `scale-50 lg:scale-100`, because
+ * even `scale(1)` is still a transform: it promotes the node to its own
+ * compositing layer and flips text from subpixel to greyscale antialiasing, which
+ * would repaint every glyph in the mockup at 1440. Desktop must carry no
+ * transform at all.
+ */
+type Highlight = 'tile-1' | 'tile-2' | 'tile-3' | 'side-1' | 'side-2';
+
+interface Props {
+  /** Which single skeleton element is tinted blue. */
+  highlight: Highlight;
+  /** The first card's skeleton is one shade lighter than the rest. */
+  tone: 'light' | 'default';
+  class?: string;
+}
+const { highlight, tone, class: className } = Astro.props;
+
+const bar = tone === 'light' ? 'bg-bg-primary' : 'bg-bg-secondary';
+const at = (id: Highlight) => (highlight === id ? 'bg-bg-info' : bar);
+const hair = 'var(--color-border-default)';
+
+// Widths of the three sidebar bars, top to bottom.
+const sideBars = [97, 60, 81];
+---
+
+<div
+  class:list={[
+    'h-[147.58px] w-[299.52px] max-lg:overflow-hidden lg:h-[295.16px] lg:w-[599.04px]',
+    className,
+  ]}
+>
+  <div
+    class="flex h-[295.16px] w-[599.04px] flex-col bg-bg-default max-lg:origin-top-left max-lg:scale-50"
+  >
+    {/* chrome bar: fill is off, only its hairline draws */}
+    <div
+      class="flex h-[20.16px] shrink-0 flex-col px-[10.4px] py-2"
+      style={`box-shadow: inset 0 0 0 0.208px ${hair}`}
+    >
+      <div class="flex h-[4.16px] gap-[3.744px]">
+        {
+          [0, 1, 2].map(() => (
+            <span class="size-[4.16px] shrink-0 rounded-full bg-text-disabled" aria-hidden="true" />
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="flex h-[275px]">
+      {/* left panel */}
+      <div
+        class="w-[117px] shrink-0"
+        style={`box-shadow: inset -0.2px 0 0 0 ${hair}, inset 0.2px 0 0 0 ${hair}, inset 0 -0.2px 0 0 ${hair}`}
+      >
+        <div class="mt-[16.84px] ml-[10px] flex w-[97px] flex-col gap-2">
+          {
+            sideBars.map((w, i) => (
+              <span
+                class:list={['block h-2', at(`side-${i + 1}` as Highlight)]}
+                style={`width:${w}px`}
+              />
+            ))
+          }
+        </div>
+      </div>
+
+      {/* right panel */}
+      <div
+        class="flex-1"
+        style={`box-shadow: inset -0.2px 0 0 0 ${hair}, inset 0 -0.2px 0 0 ${hair}`}
+      >
+        <div class="mt-[16.84px] ml-4 flex w-[450px] flex-col gap-[13px]">
+          <span class:list={['block h-2 w-[209px]', bar]}></span>
+          <div class="flex h-20 gap-1">
+            {
+              [1, 2, 3].map((i) => (
+                <span class:list={['block h-20 w-[147.33px]', at(`tile-${i}` as Highlight)]} />
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

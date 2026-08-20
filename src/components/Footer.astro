@@ -1,0 +1,66 @@
+---
+import Logo from './Logo.astro';
+import Button from './Button.astro';
+
+/**
+ * Footer.
+ *
+ * Desktop is three rows 32px apart inside 120px padding, giving the drawn 368px
+ * height, with only the first row horizontally split. Mobile keeps the same three
+ * blocks and the same 32px rhythm but splits that first row into two stacked,
+ * left-aligned rows 48px apart, inside 80px vertical padding for a 404px height.
+ *
+ * The content column is a fixed 343 centred in 375, which the design achieves by
+ * centring rather than by side padding. The 16px gutter here comes from the
+ * section's own padding so that narrower viewports still get a gutter instead of
+ * text touching the edge.
+ *
+ * The wordmark takes a different grey at each breakpoint because the design draws
+ * it that way: #171717 at 375, #374151 at 1440, and #262626 in the nav. Three
+ * different greys for one mark, each reproduced as drawn rather than unified.
+ *
+ * Copy is verbatim, including the lowercase "pool" and "all rights reserved", and
+ * "Linkedin" with a lowercase "in". No destination is specified for any of these
+ * links in the design, so none is invented. The links carry no rule under them at
+ * either breakpoint -- unlike every other tertiary button on the page, the design
+ * gives these no underline node.
+ */
+const links = [
+  { label: 'Terms of service', href: '#terms' },
+  { label: 'Privacy policy', href: '#privacy' },
+];
+---
+
+<footer class="bg-bg-default px-4 py-20 lg:px-6 lg:py-30 xl:px-30">
+  <div class="mx-auto flex w-full max-w-[343px] flex-col gap-8 lg:max-w-[1200px]">
+    <div
+      class="flex flex-col gap-12 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-8"
+    >
+      <div class="flex items-center gap-8">
+        <a href="/" class="text-[#171717] lg:text-header-alt" aria-label="DMND home">
+          <Logo width={57} height={24} />
+        </a>
+        <Button variant="tertiary" size="small" href="#linkedin" label="Linkedin" />
+        <Button variant="tertiary" size="small" href="#x" label="X" />
+      </div>
+
+      <div class="flex items-center gap-8">
+        {links.map((l) => <Button variant="tertiary" size="small" href={l.href} label={l.label} />)}
+      </div>
+    </div>
+
+    {/* A zero-height rule, matching the design's 0-height line with a centred
+        0.5px stroke. Browsers round a hairline up to one device pixel when
+        painting, so the footer measures ~1px taller than the frame. */}
+    <div class="-mb-px h-px w-full bg-border-default/50"></div>
+
+    <div class="flex flex-col gap-1">
+      <p class="text-sm text-header-default">&copy; 2026 DMND pool. all rights reserved.</p>
+      <p class="text-xs text-body-alt">
+        DMND is a trading name of Guru Protocol Ltd, a company registered in England and Wales
+        (Company No. 15235937). Registered office: 85 Great Portland Street, London, England, W1W
+        7LT.
+      </p>
+    </div>
+  </div>
+</footer>

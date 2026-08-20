@@ -1,0 +1,135 @@
+@import 'tailwindcss';
+
+/* Self-hosted so the page renders identically to the dashboard, which ships the
+   same two families. Variable fonts cover every weight the design uses:
+   Geist 400/500/600/700 and Radio Canada Big 400/500/600. */
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/radio-canada-big';
+/* The real italic face; without it the browser shears the roman instead. */
+@import '@fontsource-variable/radio-canada-big/wght-italic.css';
+
+/*
+  The design tokens, transcribed from the Figma variable set on the landing frame.
+
+  Values are written as literal hex on purpose. The dashboard stores colours as HSL
+  parts and rebuilds them with hsl(), which round-trips lossily -- its own tokens
+  land a shade off the hex in their comments. Tailwind v4 takes the hex directly, so
+  every colour here is byte-exact to the design.
+
+  Names mirror the design's own variable names (Text/Body alt -> text-body-alt) so
+  a spec value maps one-to-one onto a utility class.
+*/
+@theme {
+  /* Typeface */
+  --font-body: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Radio Canada Big Variable', 'Geist Variable', ui-sans-serif, sans-serif;
+
+  /* Type scale: size + its paired line-height, exactly as the variables define */
+  --text-xs: 12px;
+  --text-xs--line-height: 16px;
+  --text-sm: 14px;
+  --text-sm--line-height: 20px;
+  --text-base: 16px;
+  --text-base--line-height: 24px;
+  --text-lg: 18px;
+  --text-lg--line-height: 28px;
+  --text-xl: 20px;
+  --text-xl--line-height: 32px;
+  --text-2xl: 24px;
+  --text-2xl--line-height: 36px;
+  --text-3xl: 30px;
+  --text-3xl--line-height: 40px;
+  --text-4xl: 36px;
+  --text-4xl--line-height: 48px;
+  --text-5xl: 48px;
+  --text-5xl--line-height: 48px;
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  --tracking-normal: 0px;
+  --tracking-tight: -1px;
+
+  /* Backgrounds */
+  --color-bg-default: #fafafa;
+  --color-bg-primary: #f5f5f5;
+  --color-bg-secondary: #e5e5e5;
+  --color-bg-dark: #e5e5e5;
+  --color-bg-info: #dbeafe;
+  --color-bg-white: #ffffff;
+
+  /* Text */
+  --color-header-default: #1f2937;
+  --color-header-alt: #374151;
+  --color-body-default: #262626;
+  --color-body-alt: #737373;
+  --color-text-disabled: #a3a3a3;
+  --color-text-placeholder: #a3a3a3;
+  --color-text-secondary: #8e8e93;
+  --color-text-info: #3b82f6;
+  --color-text-success: #16a34a;
+  --color-on-solid: #e5e5e5;
+
+  /* Buttons */
+  --color-btn-bg: #262626;
+  --color-btn-text: #f5f5f5;
+  --color-btn-secondary: #f3f4f6;
+  --color-btn-secondary-text: #262626;
+  --color-btn-secondary-icon: #525252;
+  --color-btn-border: #00000033;
+  --color-btn-tertiary: #262626;
+
+  /* Borders */
+  --color-border-default: #d4d4d4;
+  --color-border-disabled: #e5e7eb;
+  --color-border-info: #3b82f6;
+  --color-border-on-bg: #ffffff;
+
+  /* Icons */
+  --color-icon-default: #262626;
+  --color-icon-alt: #525252;
+  --color-icon-success: #00c950;
+
+  /* Palette */
+  --color-blue-300: #8ec5ff;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-default: #2b7fff;
+  --color-green-500: #22c55e;
+  --color-fuchsia-500: #d946ef;
+
+  /* Radii -- the design uses 4 / 8 / 32 / full */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-lg: 32px;
+  --radius-full: 1000px;
+}
+
+/*
+  0.5px borders are a real, load-bearing value in this design system, not a
+  rounding artifact. Tailwind has no preset for it.
+*/
+@utility border-hairline {
+  border-width: 0.5px;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-bg-default);
+  color: var(--color-body-default);
+  font-family: var(--font-body);
+}
+
+/* Headings use the display face; the design never sets it per-element. */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+}
