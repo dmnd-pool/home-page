@@ -5,10 +5,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Allow one concurrent deployment, and let a newer push supersede a running one.
+# Allow one concurrent deployment.
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions:
   contents: read

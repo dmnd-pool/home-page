@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--
+      Runs before the browser paints anything, so the stored theme is on <html>
+      by the time the first pixel lands and there is no light flash on a dark
+      reload. It has to be inline and synchronous for that -- a bundled module,
+      or anything React does after hydration, resolves far too late.
+
+      `color-scheme` is set alongside so the scrollbar, form controls and the
+      canvas behind the page follow the theme too.
+    -->
+    <script>
+      (() => {
+        let theme = 'light';
+        try {
+          const stored = localStorage.getItem('theme');
+          theme =
+            stored === 'dark' || stored === 'light'
+              ? stored
+              : window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+        } catch {
+          /* Private mode, or storage disabled: fall through to the light default. */
+        }
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
+
+    <title>DMND — The first Stratum V2 mining pool</title>
+    <meta
+      name="description"
+      content="DMND is the first production Stratum V2 mining pool. Encrypted end-to-end, miner-built block templates, and payouts you can verify."
+    />
+    <link rel="canonical" href="https://www.dmnd.work/" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#fafafa" />
+
+    <!--
+      Everything below is discovered by the preload scanner before the bundle
+      arrives. That matters more here than it would elsewhere: the page ships an
+      empty #root and renders from JS, so without these the browser cannot know
+      the hero artwork or these two faces exist until ~84KB of gzipped JS has been
+      fetched, parsed and run. Vite resolves each href at build time and rewrites
+      it to the hashed filename it emits.
+
+      The hero artwork is preloaded too, but it cannot be written here -- see the
+      note on `heroPreload` in vite.config.js.
+    -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/node_modules/@fontsource-variable/radio-canada-big/files/radio-canada-big-latin-wght-normal.woff2"
+      crossorigin
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="DMND" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:title" content="DMND — The first Stratum V2 mining pool" />
+    <meta
+      property="og:description"
+      content="DMND is the first production Stratum V2 mining pool. Encrypted end-to-end, miner-built block templates, and payouts you can verify."
+    />
+    <meta property="og:url" content="https://www.dmnd.work/" />
+    <meta property="og:image" content="https://www.dmnd.work/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="The DMND dashboard, showing live pool hashrate and per-worker detail."
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DMND — The first Stratum V2 mining pool" />
+    <meta
+      name="twitter:description"
+      content="DMND is the first production Stratum V2 mining pool. Encrypted end-to-end, miner-built block templates, and payouts you can verify."
+    />
+    <meta name="twitter:image" content="https://www.dmnd.work/og.png" />
+  </head>
+  <body>
+    <div id="root"><!--app-html--></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

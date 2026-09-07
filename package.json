@@ -1,28 +1,30 @@
 {
   "name": "dmnd-home-page",
-  "type": "module",
-  "version": "0.1.0",
   "private": true,
+  "version": "0.1.0",
+  "type": "module",
   "engines": {
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro check && astro build",
-    "preview": "astro preview",
-    "typecheck": "astro check",
-    "astro": "astro"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.9",
     "@fontsource-variable/radio-canada-big": "^5.2.7",
-    "astro": "^7.2.1"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.10",
     "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "^6.1.0",
+    "oxlint": "^1.79.0",
+    "sharp": "^0.35.3",
     "tailwindcss": "^4.3.3",
-    "typescript": "^5.7.2"
+    "vite": "^8.2.2",
+    "vite-imagetools": "^12.0.0"
   }
 }
