@@ -1,0 +1,23 @@
+# build output
+dist/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment
+.env
+.env.production
+
+# editor / OS
+.DS_Store
+.vscode/
+.idea/
+
+# Working extraction notes, not part of the site
+.notes/

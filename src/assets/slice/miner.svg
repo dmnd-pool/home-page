@@ -1,0 +1,40 @@
+<svg width="53" height="53" viewBox="0 0 53 53" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="53" height="53" fill="#1E1E1E"/>
+<g id="Landing page - DMND new">
+<g id="Desktop - 29" clip-path="url(#clip0_5_13)">
+<rect width="1440" height="712.011" transform="translate(-222.502 -315.508)" fill="#FAFAFA"/>
+<g id="Frame 29">
+<g id="Frame 27">
+<mask id="path-1-inside-1_5_13" fill="white">
+<path d="M-102.5 -195.508H1097.5V276.503H-102.5V-195.508Z"/>
+</mask>
+<path d="M1097.5 -195.508H1097V276.503H1097.5H1098V-195.508H1097.5ZM-102.5 276.503H-102V-195.508H-102.5H-103V276.503H-102.5Z" fill="black" fill-opacity="0.2" mask="url(#path-1-inside-1_5_13)"/>
+<g id="Frame 28">
+<g id="Frame 18">
+<g id="Frame 10">
+<mask id="path-3-inside-2_5_13" fill="white">
+<path d="M-23.5 -23.5H318.5V212.5H-23.5V-23.5Z"/>
+</mask>
+<path d="M-23.5 -23.5H318.5V212.5H-23.5V-23.5Z" fill="#F5F5F5"/>
+<path d="M-23.5 -23.5V-24H-24V-23.5H-23.5ZM318.5 -23.5H319V-24H318.5V-23.5ZM318.5 212.5V213H319V212.5H318.5ZM-23.5 212.5H-24V213H-23.5V212.5ZM-23.5 -23.5V-23H318.5V-23.5V-24H-23.5V-23.5ZM318.5 -23.5H318V212.5H318.5H319V-23.5H318.5ZM318.5 212.5V212H-23.5V212.5V213H318.5V212.5ZM-23.5 212.5H-23V-23.5H-23.5H-24V212.5H-23.5Z" fill="#D4D4D4" mask="url(#path-3-inside-2_5_13)"/>
+<g id="Miner 150w">
+<rect id="Rectangle" x="0.5" y="0.5" width="52" height="52" fill="#E5E5E5" stroke="#525252"/>
+<g id="Group 5">
+<circle id="Ellipse 30" cx="26.5" cy="26.5" r="16" fill="#FAFAFA" stroke="#525252"/>
+<path id="Vector 81" d="M8.5 8.5L44.5 44.5001" stroke="#525252" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector 82" d="M44.5 8.5L8.5 44.5" stroke="#525252" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_5_13">
+<rect width="1440" height="712.011" fill="white" transform="translate(-222.502 -315.508)"/>
+</clipPath>
+</defs>
+</svg>

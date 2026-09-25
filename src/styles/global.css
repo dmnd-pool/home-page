@@ -1,0 +1,206 @@
+@import 'tailwindcss';
+
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/radio-canada-big';
+@import '@fontsource-variable/radio-canada-big/wght-italic.css';
+
+/* The explicit attribute lets a saved user choice override the OS preference. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme {
+  --font-body: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Radio Canada Big Variable', 'Geist Variable', ui-sans-serif, sans-serif;
+
+  --text-xs: 12px;
+  --text-xs--line-height: 16px;
+  --text-sm: 14px;
+  --text-sm--line-height: 20px;
+  --text-base: 16px;
+  --text-base--line-height: 24px;
+  --text-lg: 18px;
+  --text-lg--line-height: 28px;
+  --text-xl: 20px;
+  --text-xl--line-height: 32px;
+  --text-2xl: 24px;
+  --text-2xl--line-height: 36px;
+  --text-3xl: 30px;
+  --text-3xl--line-height: 40px;
+  --text-4xl: 36px;
+  --text-4xl--line-height: 48px;
+  --text-5xl: 48px;
+  --text-5xl--line-height: 48px;
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  --tracking-normal: 0px;
+  --tracking-tight: -1px;
+
+  --color-bg-default: #ffffff;
+  --color-bg-primary: #f5f5f5;
+  --color-bg-secondary: #e5e5e5;
+  --color-bg-dark: #e5e5e5;
+  --color-bg-info: #dbeafe;
+  --color-bg-white: #ffffff;
+
+  --color-header-default: #1f2937;
+  --color-header-alt: #374151;
+  /* The footer wordmark's own grey at 375. The design gives that one mark three
+     different greys -- #262626 in the nav, #374151 in the footer at 1440, and this
+     -- so it gets a token rather than a literal buried in the markup. */
+  --color-header-strong: #171717;
+  --color-body-default: #262626;
+  --color-body-alt: #737373;
+  --color-text-disabled: #a3a3a3;
+  --color-text-placeholder: #a3a3a3;
+  --color-text-secondary: #8e8e93;
+  --color-text-info: #3b82f6;
+  --color-text-success: #16a34a;
+  --color-on-solid: #e5e5e5;
+
+  --color-btn-bg: #262626;
+  --color-btn-bg-hover: #404040;
+  --color-btn-text: #f5f5f5;
+  --color-btn-secondary: #f3f4f6;
+  --color-btn-secondary-hover: #e9eaee;
+  --color-btn-secondary-text: #262626;
+  --color-btn-secondary-icon: #525252;
+  --color-btn-border: #00000033;
+  --color-btn-tertiary: #262626;
+
+  --color-border-default: #d4d4d4;
+  --color-border-disabled: #e5e7eb;
+  --color-border-info: #3b82f6;
+  --color-border-on-bg: #ffffff;
+
+  --color-icon-default: #262626;
+  --color-icon-alt: #525252;
+  --color-icon-success: #00c950;
+
+  --color-blue-300: #8ec5ff;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-default: #2b7fff;
+  --color-green-500: #22c55e;
+  --color-fuchsia-500: #d946ef;
+
+  --color-scrim: #00000059;
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-lg: 32px;
+  --radius-full: 1000px;
+}
+
+/* Dark mode is derived rather than supplied by the design and needs design review. */
+[data-theme='dark'] {
+  /* Backgrounds are the exact inverse of their light values -- #fafafa -> #050505,
+     #f5f5f5 -> #0a0a0a, #e5e5e5 -> #1a1a1a. That is not tidiness for its own sake.
+     Every illustration was exported with its background composited in at #fafafa,
+     and `art-adaptive` re-darkens it by inverting, so a surface that is anything
+     other than the inverse leaves each picture sitting in a faintly visible
+     rectangle of the wrong grey. Inverting the ramp also preserves the light
+     theme's own surface separation exactly, which is a slim 2% and easy to
+     overstate when picking dark values by eye. */
+  --color-bg-default: #050505;
+  --color-bg-primary: #0a0a0a;
+  --color-bg-secondary: #1a1a1a;
+  --color-bg-dark: #1a1a1a;
+  --color-bg-info: #17304f;
+  --color-bg-white: #1a1a1a;
+
+  --color-header-default: #f3f4f6;
+  --color-header-alt: #e5e7eb;
+  --color-header-strong: #f5f5f5;
+  --color-body-default: #ededed;
+  --color-body-alt: #a3a3a3;
+  --color-text-disabled: #6e6e6e;
+  --color-text-placeholder: #6e6e6e;
+  --color-text-secondary: #8e8e93;
+  --color-text-info: #60a5fa;
+  --color-text-success: #4ade80;
+  --color-on-solid: #262626;
+
+  --color-btn-bg: #ededed;
+  --color-btn-bg-hover: #d4d4d4;
+  --color-btn-text: #141414;
+  --color-btn-secondary: #1f1f1f;
+  --color-btn-secondary-hover: #2a2a2a;
+  --color-btn-secondary-text: #ededed;
+  --color-btn-secondary-icon: #a3a3a3;
+  --color-btn-border: #ffffff33;
+  --color-btn-tertiary: #ededed;
+
+  /* Borders. Hairlines are painted as 1px at 50% alpha to fake the design's
+     0.5px, so the base grey is lifted here to survive that halving. */
+  --color-border-default: #3d3d3d;
+  --color-border-disabled: #2a2a2a;
+  --color-border-info: #60a5fa;
+  --color-border-on-bg: #0a0a0a;
+
+  --color-icon-default: #ededed;
+  --color-icon-alt: #a3a3a3;
+  --color-icon-success: #00c950;
+
+  /* The artwork behind the dashboard is a light halftone; dimming it harder is
+     what keeps the section from glowing against the rest of the page. */
+  --color-scrim: #000000bf;
+}
+
+@utility border-hairline {
+  border-width: 0.5px;
+}
+
+/*
+  Every illustration was exported from Figma with its background already composited
+  in -- the alpha channel is present but fully opaque -- so on a dark page each one
+  would render as a lit rectangle. Inverting and rotating the hue back re-darkens
+  the ground while returning the blues to roughly where they started, which is
+  enough for line art and flat texture.
+
+  It is applied by hand rather than to every image, because it is wrong for two
+  kinds of picture: photographs, and the dashboard screenshot. Inverting a product
+  shot would invent a dark UI the product does not have.
+*/
+@utility art-adaptive {
+  @variant dark {
+    filter: invert(1) hue-rotate(180deg);
+  }
+}
+
+.block-hatch {
+  background-image: repeating-linear-gradient(
+    137.5deg,
+    transparent 0 34px,
+    var(--color-bg-secondary) 34px 36px,
+    transparent 36px 50px
+  );
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+}
+
+body {
+  background-color: var(--color-bg-default);
+  color: var(--color-body-default);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+}
