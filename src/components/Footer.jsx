@@ -2,36 +2,11 @@ import Logo from './Logo.jsx';
 import Button from './Button.jsx';
 import { LINKS } from '../config/links.js';
 
-/**
- * Footer.
- *
- * Desktop is three rows 32px apart inside 120px padding, giving the drawn 368px
- * height, with only the first row horizontally split. Mobile keeps the same three
- * blocks and the same 32px rhythm but splits that first row into two stacked,
- * left-aligned rows 48px apart, inside 80px vertical padding for a 404px height.
- *
- * The mobile column is not pinned to the drawn 343: the section's own 16px gutter
- * produces exactly that width at 375 and then lets the column grow, rather than
- * stranding a phone-width block in the middle of a tablet.
- *
- * The wordmark takes a different grey at each breakpoint because the design draws
- * it that way: #171717 at 375, #374151 at 1440, and #262626 in the nav. Three
- * different greys for one mark, each reproduced as drawn rather than unified. The
- * 375 grey is `header-strong` so it has somewhere to go in dark mode.
- *
- * Copy is verbatim, including the lowercase "pool" and "all rights reserved", and
- * "Linkedin" with a lowercase "in". The links carry no rule under them at either
- * breakpoint -- unlike every other tertiary button on the page, the design gives
- * these no underline node.
- */
 const LEGAL = [
   { label: 'Terms of service', href: LINKS.terms },
   { label: 'Privacy policy', href: LINKS.privacy },
 ];
 
-// Stamped at build time rather than hardcoded, so the notice does not quietly go
-// stale on 1 January. The site is statically generated and redeployed on every
-// push, so this is the year of the last deploy.
 const YEAR = new Date().getFullYear();
 
 export default function Footer() {
@@ -58,9 +33,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* A zero-height rule, matching the design's 0-height line with a centred
-            0.5px stroke. Browsers round a hairline up to one device pixel when
-            painting, so the footer measures ~1px taller than the frame. */}
         <div className="-mb-px h-px w-full bg-border-default/50" />
 
         <div className="flex flex-col gap-1">

@@ -1,7 +1,4 @@
-/**
- * Solar `Arrow Right Up`, Style=Outline. The trailing glyph on the page's
- * tertiary links. Drawn as a filled path, so it takes currentColor as a fill.
- */
+
 export default function ArrowRightUp({ className }) {
   return (
     <svg

@@ -1,6 +1,7 @@
 import Nav from './components/Nav.jsx';
 import Hero from './components/sections/Hero.jsx';
 import Stats from './components/sections/Stats.jsx';
+import BlockMilestone from './components/sections/BlockMilestone.jsx';
 import Efficiency from './components/sections/Efficiency.jsx';
 import BuiltForEvery from './components/sections/BuiltForEvery.jsx';
 import ChooseYourBlock from './components/sections/ChooseYourBlock.jsx';
@@ -14,17 +15,9 @@ import Blog from './components/sections/Blog.jsx';
 import Cta from './components/sections/Cta.jsx';
 import Footer from './components/Footer.jsx';
 
-/**
- * The landing page. Sections butt flush against each other -- the design frame is a
- * vertical stack with itemSpacing 0, so all vertical rhythm lives in each section's
- * own padding rather than in a gap between them.
- */
 export default function App() {
   return (
     <>
-      {/* The nav sits inside the hero section in the design, not above it.
-          Sticky, so it stays available once the page scrolls; the solid
-          background is what keeps the content from showing through. */}
       <header className="sticky top-0 z-50 bg-bg-default pt-6 lg:pt-0">
         <Nav />
       </header>
@@ -32,6 +25,7 @@ export default function App() {
       <main>
         <Hero />
         <Stats />
+        <BlockMilestone />
         <Efficiency />
         <BuiltForEvery />
         <ChooseYourBlock />

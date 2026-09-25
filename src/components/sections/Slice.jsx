@@ -2,9 +2,9 @@ import Button from '../Button.jsx';
 import ArrowRightUp from '../icons/ArrowRightUp.jsx';
 import { cx } from '../../lib/cx.js';
 import { LINKS, SECTION_IDS } from '../../config/links.js';
-import minerIcon from '../../assets/slice/miner.svg?raw';
-import trackedIcon from '../../assets/slice/tracked.svg?raw';
-import coinIcon from '../../assets/slice/coin.svg?raw';
+import minerIcon from '../../assets/slice/miner.svg';
+import trackedIcon from '../../assets/slice/tracked.svg';
+import coinIcon from '../../assets/slice/coin.svg';
 
 const CARDS = [
   {
@@ -25,7 +25,6 @@ const CARDS = [
     icon: coinIcon,
     name: 'Payout',
     title: 'Block found, payout calculated',
-    // The design sets this one in Medium where the other two are SemiBold.
     body: 'When DMND finds a block, rewards are split by share contribution under SLICE.',
     weight: 'font-medium',
   },
@@ -59,12 +58,7 @@ export default function Slice() {
                 key={c.title}
                 className="flex w-full flex-col gap-16 bg-bg-primary p-6 shadow-[inset_0_0_0_0.5px_var(--color-border-default)] lg:h-[236px] lg:flex-1 lg:justify-between lg:gap-0"
               >
-                <span
-                  className="inline-flex size-13 shrink-0"
-                  role="img"
-                  aria-label={c.name}
-                  dangerouslySetInnerHTML={{ __html: c.icon }}
-                />
+                <img className="size-13 shrink-0" src={c.icon} alt={c.name} width="52" height="52" />
                 <div className="flex flex-col gap-1">
                   <h3 className={cx('text-lg text-header-default', c.weight)}>{c.title}</h3>
                   <p className="text-sm text-body-alt">{c.body}</p>

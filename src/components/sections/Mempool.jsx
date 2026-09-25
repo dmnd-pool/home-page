@@ -5,76 +5,17 @@ import ArrowRightUp from '../icons/ArrowRightUp.jsx';
 import { cx } from '../../lib/cx.js';
 import { LINKS } from '../../config/links.js';
 
-/**
- * The capabilities section.
- *
- * A rail of five labels beside a panel describing the selected one.
- *
- * THE RAIL IS A TAB LIST, which the design implies but never wired up. Figma
- * draws MEMPOOL with a filled background, a green dot and darker text while the
- * other four sit plain -- a selected state on a five-item list whose items map
- * one-to-one onto five cards. The original build reproduced that literally: the
- * highlight was hardcoded to the first item, the labels did nothing, and all five
- * cards sat in a column you scrolled. Reading it as a tab list keeps every drawn
- * pixel of the selected and unselected states and makes them mean something.
- *
- * Choosing tabs over the scrolling column also buys the copy room. Each
- * capability now carries a real paragraph rather than the single line that fitted
- * when five cards had to share one 484px window.
- *
- * The rail turns: 282 wide down the left side at 1440, 604 wide across the top at
- * 375, where it is its own horizontal scroll region -- the design laid a 604-wide
- * rail inside a 375 frame and let the overflow crop, which left MERGE MINING and
- * BLOCK rendered past the right edge of the phone with no way to reach them.
- *
- * Scrollbars are hidden because the design draws none, and a classic 15px
- * scrollbar would eat into the column and shift the mockup. The regions stay
- * keyboard-operable: the tabs take arrow keys, Home and End with a roving
- * tabindex, and the panel itself is focusable so its overflow can be scrolled.
- *
- * The block is fluid below lg rather than a fixed 604: the section's 16px gutter
- * reproduces the drawn 343 card width at 375 and then lets it grow.
- *
- * THE SECTION IS TALLER THAN DRAWN -- 568 against 504, and 660 against 600. The
- * drawn heights were sized for cards carrying a single line of copy; a paragraph
- * per capability needs 525 at desktop against the 484 the design allows, which
- * would clip the mockup off the bottom of its own panel. The panel is sized to
- * the TALLEST capability rather than to each one, so switching tabs never jumps
- * the page. `overflow-y-auto` stays as a backstop for a future capability with
- * more to say than these five.
- */
-
-/**
- * Copy is lifted verbatim from DMND's own sources rather than written here, so a
- * capability claims exactly what the product documents.
- *
- *   MEMPOOL       written here. The substance is the dmnd-client README, "7.
- *                 Prioritize Transactions (optional)", and the three use cases
- *                 come from sv2-ui's PrioritizeTransactionsPage lede -- but that
- *                 README is operator documentation, and transcribing its RPC and
- *                 fee-delta mechanics put configuration reference in a panel that
- *                 has to sell the capability.
- *   AUDITING      transparency.dmnd.work
- *   SIGNALING     sv2-ui, JobDeclarationPage -- lede and "Why build your own block?"
- *   MERGE MINING  sv2-ui, MergeMiningPage lede
- *   BLOCK         sv2-ui, JobDeclarationPage lede and BuildYourBlockPage
- *
- * The other four are transcribed as written, including the unspaced em dash in
- * MERGE MINING and the missing article in "validates declared job".
- */
 const CAPABILITIES = [
-    {
+  {
     id: 'block',
     rail: 'BLOCK STAMPING',
     title: 'Block stamping',
-    body: [
-      'Every block your pool mines gets your name on it — visible on mempool.space.',
-    ],
+    body: ['Every block your pool mines gets your name on it — visible on mempool.space.'],
     href: LINKS.postFirstBlock,
     tone: 'default',
     highlight: 'side-2',
     mockRight: true,
-    mockLeft: 22,
+    mockOffset: 'pl-[22px]',
   },
   {
     id: 'mempool',
@@ -88,9 +29,9 @@ const CAPABILITIES = [
     tone: 'light',
     highlight: 'tile-1',
     mockRight: true,
-    mockLeft: 24,
+    mockOffset: 'pl-6',
   },
-    {
+  {
     id: 'merge-mining',
     rail: 'MERGE MINING',
     title: 'Merge mining & side-chain expansion',
@@ -101,7 +42,7 @@ const CAPABILITIES = [
     tone: 'default',
     highlight: 'side-1',
     mockRight: false,
-    mockLeft: 22,
+    mockOffset: 'pl-[22px]',
   },
   {
     id: 'auditing',
@@ -115,7 +56,7 @@ const CAPABILITIES = [
     tone: 'default',
     highlight: 'tile-2',
     mockRight: false,
-    mockLeft: 22,
+    mockOffset: 'pl-[22px]',
   },
   {
     id: 'signaling',
@@ -129,12 +70,16 @@ const CAPABILITIES = [
     tone: 'default',
     highlight: 'tile-3',
     mockRight: true,
-    mockLeft: 22,
+    mockOffset: 'pl-[22px]',
   },
 ];
 
-const HAIR = 'var(--color-border-default)';
-const CARD_EDGES = `inset 0.5px 0.5px 0 0 ${HAIR}, inset -0.5px -0.5px 0 0 ${HAIR}`;
+const CARD_EDGES =
+  'shadow-[inset_0.5px_0.5px_0_0_var(--color-border-default),inset_-0.5px_-0.5px_0_0_var(--color-border-default)]';
+const TAB_EDGES =
+  'shadow-[inset_0.5px_0_0_0_var(--color-border-default),inset_0_-0.5px_0_0_var(--color-border-default)]';
+const SELECTED_TAB_EDGES =
+  'shadow-[inset_0.5px_0_0_0_var(--color-border-default),inset_0_-0.5px_0_0_var(--color-border-default),inset_0_0.5px_0_0_var(--color-border-default),inset_-0.5px_0_0_0_var(--color-border-default)]';
 const NO_SCROLLBAR = '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden';
 
 export default function Mempool() {
@@ -145,9 +90,11 @@ export default function Mempool() {
   const onKeyDown = (event) => {
     const last = CAPABILITIES.length - 1;
     let next = null;
-    // Both axes, because the rail is a row below lg and a column from lg up.
-    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = selected === last ? 0 : selected + 1;
-    else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = selected === 0 ? last : selected - 1;
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      next = selected === last ? 0 : selected + 1;
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      next = selected === 0 ? last : selected - 1;
+    }
     else if (event.key === 'Home') next = 0;
     else if (event.key === 'End') next = last;
     if (next === null) return;
@@ -160,8 +107,6 @@ export default function Mempool() {
   return (
     <section className="relative h-[568px] overflow-hidden bg-bg-default lg:h-[660px]">
       <div className="absolute inset-x-4 top-20 lg:inset-x-0 lg:top-0 lg:mx-auto lg:h-full lg:w-full lg:max-w-[1200px]">
-        {/* The rail: a horizontal strip above the panel at 375, a vertical column
-            beside it from lg. Only the selected row is filled and boxed. */}
         <div
           className={cx(
             'absolute top-0 left-0 w-full overflow-x-auto lg:top-[120px] lg:w-[282px] lg:overflow-x-visible',
@@ -171,7 +116,6 @@ export default function Mempool() {
           <div
             role="tablist"
             aria-label="Mining capabilities"
-            aria-orientation="vertical"
             onKeyDown={onKeyDown}
             className="flex w-[604px] shadow-[inset_0_0_0_0.5px_var(--color-border-default)] lg:w-full lg:flex-col lg:shadow-none"
           >
@@ -193,12 +137,8 @@ export default function Mempool() {
                   className={cx(
                     'relative flex cursor-pointer items-center px-6 py-6 text-left transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-500 lg:h-[72px] lg:w-full lg:py-0',
                     isSelected ? 'bg-bg-primary' : 'hover:bg-bg-primary/60',
+                    isSelected ? SELECTED_TAB_EDGES : TAB_EDGES,
                   )}
-                  style={{
-                    boxShadow: `inset 0.5px 0 0 0 ${HAIR}, inset 0 -0.5px 0 0 ${HAIR}${
-                      isSelected ? `, inset 0 0.5px 0 0 ${HAIR}, inset -0.5px 0 0 0 ${HAIR}` : ''
-                    }`,
-                  }}
                 >
                   <span className="flex items-center gap-1">
                     {isSelected && (
@@ -219,7 +159,6 @@ export default function Mempool() {
           </div>
         </div>
 
-        {/* The panel for whichever capability is selected. */}
         <div
           role="tabpanel"
           id={`panel-${active.id}`}
@@ -230,16 +169,13 @@ export default function Mempool() {
             NO_SCROLLBAR,
           )}
         >
-          <div
-            className="flex h-full min-h-full flex-col overflow-hidden"
-            style={{ boxShadow: CARD_EDGES }}
-          >
+          <div className={cx('flex h-full min-h-full flex-col overflow-hidden', CARD_EDGES)}>
             <div className="flex flex-col gap-2 px-6 pt-6 pb-4 lg:pt-8">
               <h3 className="font-heading text-xl leading-8 font-medium text-header-alt">
                 {active.title}
               </h3>
-              {active.body.map((paragraph, i) => (
-                <p key={i} className="max-w-[620px] text-sm text-body-alt lg:text-base">
+              {active.body.map((paragraph) => (
+                <p key={paragraph} className="max-w-[620px] text-sm text-body-alt lg:text-base">
                   {paragraph}
                 </p>
               ))}
@@ -258,14 +194,12 @@ export default function Mempool() {
               )}
             </div>
 
-            {/* The mockup sits at the foot of the panel, flush left or right as
-                the design alternates it. */}
             <div
               className={cx(
-                'mt-auto flex shrink-0 pb-6 pl-[var(--mock-l)] lg:pb-0 lg:pl-0',
+                'mt-auto flex shrink-0 pb-6 lg:pb-0 lg:pl-0',
+                active.mockOffset,
                 active.mockRight && 'lg:justify-end',
               )}
-              style={{ '--mock-l': `${active.mockLeft}px` }}
             >
               <BrowserMock tone={active.tone} highlight={active.highlight} />
             </div>

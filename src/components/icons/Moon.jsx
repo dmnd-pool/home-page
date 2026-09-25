@@ -1,8 +1,4 @@
-/**
- * Solar `Moon`, Style=Bold. The dark-mode counterpart to `Sun` in the theme
- * toggle. Drawn on a 24 grid where Sun is drawn on 18, so both are placed at
- * 18x18 and the viewBoxes do the reconciling.
- */
+
 export default function Moon({ className }) {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className} xmlns="http://www.w3.org/2000/svg">

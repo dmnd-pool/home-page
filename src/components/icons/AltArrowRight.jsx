@@ -1,7 +1,4 @@
-/**
- * Solar `Alt Arrow Right`, Style=Outline. A chevron, structurally different from
- * the diagonal `Arrow Right Up` used on the card links.
- */
+
 export default function AltArrowRight({ className }) {
   return (
     <svg

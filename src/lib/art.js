@@ -1,43 +1,4 @@
-/**
- * Every picture on the page, with its encoded variants, in one place.
- *
- * Astro resolved this through `astro:assets` and a `getImage()` call inside the
- * component. Vite has no equivalent, so the transforms are asked for by import
- * query (`vite-imagetools` runs sharp behind them) and collected here rather than
- * scattered three-to-a-file through the sections.
- *
- * Two rules decide which variants an image gets:
- *
- *  - AVIF, always. It roughly halves every asset here, photographs included.
- *  - WebP, only when the source is not already lossy. The three blog photographs
- *    are 800px JPEGs that have been through an encoder once; re-encoding them to
- *    WebP lands within a few percent of the original, and on two of the three it
- *    lands OVER it. A <source> that is bigger than the file it replaces is worse
- *    than no <source> at all, so those get AVIF and the original and nothing in
- *    between.
- *
- * Quality is the third rule, and it is set per picture rather than globally,
- * because the encoder default of 50 is either wasteful or wrong depending on what
- * is in the frame:
- *
- *  - 35 for the flat two-tone art (hero, CTA texture, aerial map, server rack).
- *    These are dithered vector exports -- two colours and hard edges, nothing for
- *    a lossy encoder to blur -- and 35 is pixel-indistinguishable from 50 at 1:1
- *    while cutting each file by roughly a third.
- *  - 40 for the dashboard backdrop, a photographic halftone that is full-bleed
- *    behind a scrim. Finer grain than the flat art, so it gets a gentler step.
- *  - The default for the dashboard screenshots and the blog photographs. The
- *    screenshots carry readable product UI and the photographs are editorial;
- *    neither is the place to save 15KB.
- *
- * `?as=img` returns `{src, w, h}`, which is where the intrinsic dimensions come
- * from -- they go on the <img> to reserve the box and keep the page from
- * reflowing as each one lands.
- *
- * Sizes are never reduced. The exports are already 2x their drawn size, which is
- * what a retina screen wants, and re-deriving a width per breakpoint would drift
- * from the crops Figma produced.
- */
+// JPEG blog photos omit WebP because re-encoding them produced larger files.
 
 import heroImg from '../assets/art-hero-warehouse.png?as=img';
 import heroAvif from '../assets/art-hero-warehouse.png?format=avif&quality=35&as=url';
@@ -96,7 +57,6 @@ import blog2Avif from '../assets/blog/blog-2.jpg?format=avif&as=url';
 import blog3Img from '../assets/blog/blog-3.jpg?as=img';
 import blog3Avif from '../assets/blog/blog-3.jpg?format=avif&as=url';
 
-/** `webp` is null for sources that gain nothing from it. See the note above. */
 const asset = (img, avif, webp = null) => ({
   src: img.src,
   width: img.w,
@@ -114,9 +74,6 @@ export const ctaTextureMobile = asset(ctaMobileImg, ctaMobileAvif, ctaMobileWebp
 export const dashboardScreenshot = asset(shotImg, shotAvif, shotWebp);
 export const dashboardScreenshotMobile = asset(shotMobileImg, shotMobileAvif, shotMobileWebp);
 
-// Already WebP on disk, so a same-quality re-encode would gain nothing. A
-// re-encode at 65 is a different question: it takes the fallback from 525KB to a
-// fraction of that, which is worth having for the browsers that miss the AVIF.
 export const dashboardBackdrop = asset(backdropImg, backdropAvif, backdropWebp);
 
 export const aerialMap = asset(aerialImg, aerialAvif, aerialWebp);

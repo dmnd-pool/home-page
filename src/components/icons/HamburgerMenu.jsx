@@ -1,18 +1,3 @@
-/**
- * Solar `Hamburger Menu`, 16x16. Three filled bars; ink comes from currentColor
- * so the dark pill it sits inside can drive it.
- *
- * The three paths are the Figma export verbatim. They describe the same rounded
- * 11.667x1 bar three times over, and could be written as three <rect rx="0.5">
- * for a tenth of the bytes -- but a framework port is the wrong moment to redraw
- * artwork, so they stay as exported.
- */
-const BARS = [
-  'M13.8333 4.6665C13.8333 4.94265 13.6094 5.1665 13.3333 5.1665L2.66658 5.1665C2.39044 5.1665 2.16658 4.94265 2.16658 4.6665C2.16658 4.39036 2.39044 4.1665 2.66658 4.1665L13.3333 4.1665C13.6094 4.1665 13.8333 4.39036 13.8333 4.6665Z',
-  'M13.8333 8C13.8333 8.27614 13.6094 8.5 13.3333 8.5L2.66658 8.5C2.39044 8.5 2.16658 8.27614 2.16658 8C2.16658 7.72386 2.39044 7.5 2.66658 7.5L13.3333 7.5C13.6094 7.5 13.8333 7.72386 13.8333 8Z',
-  'M13.8333 11.3335C13.8333 11.6096 13.6094 11.8335 13.3333 11.8335L2.66658 11.8335C2.39044 11.8335 2.16658 11.6096 2.16658 11.3335C2.16658 11.0574 2.39044 10.8335 2.66658 10.8335L13.3333 10.8335C13.6094 10.8335 13.8333 11.0574 13.8333 11.3335Z',
-];
-
 export default function HamburgerMenu({ className }) {
   return (
     <svg
@@ -24,9 +9,12 @@ export default function HamburgerMenu({ className }) {
       className={className}
       xmlns="http://www.w3.org/2000/svg"
     >
-      {BARS.map((d) => (
-        <path key={d} fillRule="evenodd" clipRule="evenodd" d={d} fill="currentColor" />
-      ))}
+      <path
+        d="M2.667 4.667h10.666M2.667 8h10.666M2.667 11.333h10.666"
+        stroke="currentColor"
+        strokeWidth="1"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import Logo from './Logo.jsx';
 import Sun from './icons/Sun.jsx';
 import Moon from './icons/Moon.jsx';
@@ -8,38 +8,13 @@ import Button from './Button.jsx';
 import { cx } from '../lib/cx.js';
 import { LINKS } from '../config/links.js';
 
-/**
- * Top navigation. 1200 wide inside the 1440 frame, 24px of padding top and bottom
- * giving the drawn 84px height.
- *
- * The design deliberately strips the bottom border at 1440: the library component
- * draws a 0.5px rule, and that instance keeps the weight but removes the paint, so
- * no line renders. At 375 the rule IS painted, so it is drawn below lg only, as an
- * inset shadow rather than a border so it adds no height to the 72.
- *
- * The current page is signalled by full opacity plus a 0.5px underline; the other
- * links sit dimmed. That is an instance override in the file rather than a
- * component state, so it is reproduced literally.
- *
- * TWO THINGS HERE ARE NOT IN THE DESIGN, because the design has no answer for them
- * and shipping the drawn version would ship a broken page:
- *
- *  - The mobile menu. The file draws a hamburger with nothing behind it, and every
- *    nav link hidden below lg -- which leaves a phone with no navigation at all.
- *    The overlay below is invented: it borrows the section padding, the type ramp
- *    and the button variants already on the page rather than introducing anything,
- *    but a designer has not seen it.
- *  - The theme toggle. Same story: a control is drawn, no dark frame exists. The
- *    palette it switches to is derived in global.css.
- */
 const LINK_ITEMS = [
   { label: 'Home', href: LINKS.home, current: true },
   { label: 'Slice', href: LINKS.slice, current: false },
   { label: 'Blog', href: LINKS.blog, current: false },
-  { label: 'Docs', href: LINKS.docs, current: false },
 ];
 
-const THEME_COLOR = { light: '#fafafa', dark: '#050505' };
+const THEME_COLOR = { light: '#ffffff', dark: '#050505' };
 
 const PILL =
   'flex size-10 items-center justify-center rounded-lg bg-btn-bg p-3 text-btn-text transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500';
@@ -47,23 +22,6 @@ const PILL =
 const TOGGLE =
   'text-icon-alt transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500';
 
-/**
- * The theme lives on <html>, not in React state.
- *
- * index.html stamps `data-theme` inline before the first paint, which is the only
- * way to avoid a light flash on a dark reload -- React does not run until long
- * after that. Making React the owner would mean re-deciding the theme during
- * hydration and fighting an attribute that is already correct, so the DOM stays
- * the source of truth and React subscribes to it.
- *
- * `useSyncExternalStore` is the primitive for exactly that shape, and a
- * MutationObserver is what turns an attribute into something subscribable: the
- * toggle and the OS listener both just write to <html>, and every reader updates
- * from the observer rather than from a second copy of the state that could drift.
- *
- * The Sun/Moon swap needs none of this -- it is a CSS `dark:` variant. The only
- * thing React needs the value for is the button's label.
- */
 const subscribeToTheme = (onChange) => {
   const observer = new MutationObserver(onChange);
   observer.observe(document.documentElement, { attributeFilter: ['data-theme'] });
@@ -76,22 +34,22 @@ const readTheme = () => (document.documentElement.dataset.theme === 'dark' ? 'da
 // before the inline script runs. Light is the designed default either way.
 const readThemeOnServer = () => 'light';
 
+const applyTheme = (next, persist) => {
+  const root = document.documentElement;
+  root.dataset.theme = next;
+  root.style.colorScheme = next;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLOR[next]);
+  if (persist) {
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      /* Storage unavailable: the choice just will not survive the next load. */
+    }
+  }
+};
+
 function useTheme() {
   const theme = useSyncExternalStore(subscribeToTheme, readTheme, readThemeOnServer);
-
-  const apply = useCallback((next, persist) => {
-    const root = document.documentElement;
-    root.dataset.theme = next;
-    root.style.colorScheme = next;
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLOR[next]);
-    if (persist) {
-      try {
-        localStorage.setItem('theme', next);
-      } catch {
-        /* Storage unavailable: the choice just will not survive the next load. */
-      }
-    }
-  }, []);
 
   useEffect(() => {
     // Follow the OS only while the reader has not made a choice of their own.
@@ -103,18 +61,16 @@ function useTheme() {
       } catch {
         /* Treat unreadable storage as "no choice made". */
       }
-      if (chosen !== 'dark' && chosen !== 'light') apply(event.matches ? 'dark' : 'light', false);
+      if (chosen !== 'dark' && chosen !== 'light') {
+        applyTheme(event.matches ? 'dark' : 'light', false);
+      }
     };
     osDark.addEventListener('change', onChange);
     return () => osDark.removeEventListener('change', onChange);
-  }, [apply]);
-
-  const toggle = useCallback(() => {
-    apply(readTheme() === 'dark' ? 'light' : 'dark', true);
-  }, [apply]);
+  }, []);
 
   return {
-    toggle,
+    toggle: () => applyTheme(readTheme() === 'dark' ? 'light' : 'dark', true),
     label: theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
   };
 }
@@ -147,6 +103,7 @@ export default function Nav() {
     const menu = menuRef.current;
     const openButton = openButtonRef.current;
     const previouslyFocused = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
     closeButtonRef.current?.focus();
     // Locking the body rather than the html element keeps iOS Safari from
     // scrolling the page behind the overlay.
@@ -191,8 +148,9 @@ export default function Nav() {
     return () => {
       document.removeEventListener('keydown', onKeyDown);
       desktop.removeEventListener('change', onBreakpoint);
-      document.body.style.overflow = '';
-      (previouslyFocused instanceof HTMLElement ? previouslyFocused : openButton)?.focus();
+      document.body.style.overflow = previousOverflow;
+      const focusTarget = previouslyFocused instanceof HTMLElement ? previouslyFocused : openButton;
+      if (focusTarget?.offsetParent !== null) focusTarget?.focus();
     };
   }, [open]);
 
@@ -223,17 +181,12 @@ export default function Nav() {
           </div>
         </div>
 
-        {/* Desktop actions */}
         <div className="hidden items-center gap-4 lg:flex">
           <ThemeToggle label={label} onToggle={toggle} />
           <Button variant="tertiary" size="default" href={LINKS.signIn} label="Sign in" />
-          <Button variant="primary" size="small" href={LINKS.startMining} label="Start mining" />
+          <Button variant="primary" size="small" href={LINKS.startMining} label="Join us" />
         </div>
 
-        {/* Mobile actions: the design pairs the theme toggle with a 40px dark menu
-            pill. The design inks the hamburger with the border grey; `btn-text` is
-            the same value to the eye and is the token that follows the button's
-            fill into dark mode, where a border grey would not. */}
         <div className="flex items-center gap-4 lg:hidden">
           <ThemeToggle label={label} onToggle={toggle} />
           <button
@@ -250,11 +203,6 @@ export default function Nav() {
         </div>
       </nav>
 
-      {/*
-        Hidden with the `hidden` attribute rather than a class so it is inert for
-        assistive technology and unfocusable while closed. It stays mounted so the
-        markup is in the pre-rendered HTML either way.
-      */}
       <div
         ref={menuRef}
         id="mobile-menu"
@@ -286,8 +234,6 @@ export default function Nav() {
                 <a
                   href={l.href}
                   aria-current={l.current ? 'page' : undefined}
-                  // Every link in the panel is an in-page anchor, so the panel
-                  // has to get out of the way for the jump to be visible.
                   onClick={() => setOpen(false)}
                   className={cx(
                     'font-heading text-3xl font-medium transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500',

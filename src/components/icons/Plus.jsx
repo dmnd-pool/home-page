@@ -1,13 +1,4 @@
-/**
- * Solar `Add`, 16x16. Two 1px bars.
- *
- * The design draws the two bars in two different greys, and that is kept -- but
- * the vertical one is drawn as a literal #262626 in the Figma export, which is a
- * bug the moment the page has a dark theme: on the dark secondary fill the bar
- * lands at #262626 on #1f1f1f and all but disappears, leaving a "+" that reads as
- * a "-". It takes the icon token instead, which is the same #262626 in light and
- * follows the theme in dark.
- */
+
 export default function Plus({ className }) {
   return (
     <svg

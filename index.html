@@ -4,15 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!--
-      Runs before the browser paints anything, so the stored theme is on <html>
-      by the time the first pixel lands and there is no light flash on a dark
-      reload. It has to be inline and synchronous for that -- a bundled module,
-      or anything React does after hydration, resolves far too late.
-
-      `color-scheme` is set alongside so the scrollbar, form controls and the
-      canvas behind the page follow the theme too.
-    -->
+    <!-- Inline to apply the saved theme before first paint. -->
     <script>
       (() => {
         let theme = 'light';
@@ -24,9 +16,7 @@
               : window.matchMedia('(prefers-color-scheme: dark)').matches
                 ? 'dark'
                 : 'light';
-        } catch {
-          /* Private mode, or storage disabled: fall through to the light default. */
-        }
+        } catch {}
         document.documentElement.dataset.theme = theme;
         document.documentElement.style.colorScheme = theme;
       })();
@@ -41,19 +31,8 @@
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="theme-color" content="#fafafa" />
+    <meta name="theme-color" content="#ffffff" />
 
-    <!--
-      Everything below is discovered by the preload scanner before the bundle
-      arrives. That matters more here than it would elsewhere: the page ships an
-      empty #root and renders from JS, so without these the browser cannot know
-      the hero artwork or these two faces exist until ~84KB of gzipped JS has been
-      fetched, parsed and run. Vite resolves each href at build time and rewrites
-      it to the hashed filename it emits.
-
-      The hero artwork is preloaded too, but it cannot be written here -- see the
-      note on `heroPreload` in vite.config.js.
-    -->
     <link
       rel="preload"
       as="font"
@@ -95,7 +74,7 @@
     <meta name="twitter:image" content="https://www.dmnd.work/og.png" />
   </head>
   <body>
-    <div id="root"><!--app-html--></div>
+    <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

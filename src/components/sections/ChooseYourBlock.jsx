@@ -3,7 +3,6 @@ import Art from '../Art.jsx';
 import { serverRack } from '../../lib/art.js';
 import { LINKS } from '../../config/links.js';
 
-
 export default function ChooseYourBlock() {
   return (
     <section className="relative overflow-hidden bg-bg-default px-6 py-20 lg:px-0 lg:py-2">
@@ -17,16 +16,15 @@ export default function ChooseYourBlock() {
           <div className="flex flex-col gap-[23px]">
             <div className="flex flex-col gap-2">
               <h2 className="w-full font-heading text-2xl font-medium tracking-tight text-body-alt lg:w-[352px] lg:text-3xl lg:tracking-normal">
-               Job{' '}
-                <span className="text-header-default">Declaration.</span>
+                Job <span className="text-header-default">Declaration.</span>
               </h2>
               <p className="w-full max-w-[518px] text-base text-body-alt">
                 The most profitable block is the one you build.
-                            <br />
-                            Every pool leaves fees on the table. Every pool quietly keeps the merge-mining rewards.
-                            On DMND, you build the block — so every satoshi it earns is yours.
-                Your current machines work here. Standard SV1 firmware connects through DMND&#39;s
-                translation layer, no firmware changes required.
+                <br />
+                Every pool leaves fees on the table. Every pool quietly keeps the merge-mining
+                rewards. On DMND, you build the block — so every satoshi it earns is yours. Your
+                current machines work here. Standard SV1 firmware connects through DMND&#39;s
+                translation layer, with no firmware changes required.
               </p>
             </div>
             <Button variant="primary" size="default" href={LINKS.runNode} label="Run your own node" />

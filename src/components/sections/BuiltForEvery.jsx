@@ -16,16 +16,21 @@ export default function BuiltForEvery() {
 
         <div className="flex flex-col justify-end gap-6">
           <p className="w-full max-w-[742px] text-base text-body-alt">
-            Every metric that matters, exported the way you want. A public API for programmatic integration. A broker dashboard for aggregators.
-            </p>
-             <p className="w-full max-w-[742px] text-base text-body-alt">
-            SOC 2 Type II certified
-            infrastructure, FPPS options, and dedicated support, with full control of your hashrate.
-            Build your own block templates, verify every payout with SLICE, and connect over
-            encrypted Stratum V2. Your node, your rules.
+            Every metric that matters, exported the way you want. A public API for programmatic
+            integration. A broker dashboard for aggregators.
+          </p>
+          <p className="w-full max-w-[742px] text-base text-body-alt">
+            SOC 2 Type II certified infrastructure, FPPS options, and dedicated support, with full
+            control of your hashrate. Build your own block templates, verify every payout with
+            SLICE, and connect over encrypted Stratum V2. Your node, your rules.
           </p>
           <div className="flex flex-col items-start gap-4 lg:flex-row lg:flex-wrap lg:items-center">
-            <Button variant="primary" size="default" href={LINKS.brokerSignup} label="Sign up as a Broker" />
+            <Button
+              variant="primary"
+              size="default"
+              href={LINKS.brokerSignup}
+              label="Sign up as a Broker"
+            />
             <Button
               variant="tertiary"
               size="default"

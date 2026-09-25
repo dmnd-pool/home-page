@@ -16,9 +16,6 @@ const ROWS = [
   ['Censorship |risk', 'Extremely Low |', 'High'],
 ];
 
-// Indexed by column, so the label column simply has no mark. Both glyphs are
-// decorative: the column they sit in is already named in its header, and the claim
-// is the cell's own text.
 const MARKS = [
   null,
   { Glyph: Check, tone: 'text-icon-success' },
@@ -27,11 +24,6 @@ const MARKS = [
 
 const COL_WIDTH = ['w-[85px]', 'w-[138px]', 'w-[126px]'];
 const RULE = 'border-border-default/50';
-
-// Desktop dots: row boundaries and the two seams, in section coordinates.
-const DOT_ROWS = [185.875, 257.875, 329.875, 401.875];
-// Mobile dots: seams at 89 and 227, boundaries at 52/116/180/244, grid-relative.
-const M_DOT_ROWS = [52, 116, 180, 244];
 
 export default function Comparison() {
   return (
@@ -43,8 +35,6 @@ export default function Comparison() {
       />
 
       <div className="absolute top-1/2 left-1/2 flex w-[357px] -translate-x-1/2 -translate-y-1/2 flex-col gap-6 overflow-hidden bg-bg-default lg:inset-x-0 lg:mx-auto lg:w-full lg:max-w-[1200px] lg:translate-x-0 lg:gap-8 lg:p-10">
-        {/* Inset to the cells' own padding, so the heading sits over "Features"
-            rather than over the column edge. */}
         <h2 className="px-2 font-heading text-3xl text-body-alt lg:px-6 lg:text-4xl">
           <span className="font-normal italic">Why join</span>{' '}
           <span className="font-medium text-header-default">DMND pool</span>
@@ -56,7 +46,6 @@ export default function Comparison() {
 
             return (
               <div key={col} className={cx('flex flex-col', COL_WIDTH[col], 'lg:w-auto lg:flex-1')}>
-                {/* header cell: 52 tall on mobile, 80 from lg */}
                 <div
                   className={cx(
                     'flex h-[52px] items-center gap-2 px-2 py-4 lg:h-20 lg:p-6',
@@ -103,7 +92,7 @@ export default function Comparison() {
                       )}
                     >
                       {r[col].split('|').map((part, n) => (
-                        <Fragment key={part}>
+                        <Fragment key={n}>
                           {n > 0 && <br className="lg:hidden" />}
                           {part}
                         </Fragment>
@@ -114,28 +103,6 @@ export default function Comparison() {
               </div>
             );
           })}
-
-          {/* Seam dots, painted over the rules. */}
-          {M_DOT_ROWS.map((y) =>
-            [89, 227].map((x) => (
-              <span
-                key={`m-${x}-${y}`}
-                aria-hidden="true"
-                className="pointer-events-none absolute size-1 rounded-full bg-icon-alt lg:hidden"
-                style={{ left: `${x - 2}px`, top: `${y - 2}px` }}
-              />
-            )),
-          )}
-          {DOT_ROWS.map((y) =>
-            [531, 905].map((x) => (
-              <span
-                key={`d-${x}-${y}`}
-                aria-hidden="true"
-                className="pointer-events-none absolute hidden size-1 rounded-full bg-icon-alt lg:block"
-                style={{ left: `${x - 160}px`, top: `${y - 108.1875}px` }}
-              />
-            )),
-          )}
         </div>
       </div>
     </section>

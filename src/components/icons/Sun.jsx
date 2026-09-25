@@ -1,8 +1,4 @@
-/**
- * Solar `Sun`, Style=Outline. Drawn as a filled compound path, not a stroked one,
- * so it takes `currentColor` as a fill. The design places it at 18x18 with the
- * glyph inset to 16.125.
- */
+
 export default function Sun({ className }) {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" className={className} xmlns="http://www.w3.org/2000/svg">

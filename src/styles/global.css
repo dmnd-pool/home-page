@@ -1,47 +1,16 @@
 @import 'tailwindcss';
 
-/* Self-hosted so the page renders identically to the dashboard, which ships the
-   same two families. Variable fonts cover every weight the design uses:
-   Geist 400/500/600/700 and Radio Canada Big 400/500/600. */
 @import '@fontsource-variable/geist';
 @import '@fontsource-variable/radio-canada-big';
-/* The real italic face; without it the browser shears the roman instead. */
 @import '@fontsource-variable/radio-canada-big/wght-italic.css';
 
-/*
-  Dark mode is driven by a `data-theme` attribute on <html>, never by a media
-  query. The inline script in index.html stamps that attribute before first paint
-  from localStorage, falling back to the OS preference, so the attribute is always
-  present and one selector can answer "is this dark?". Keying off the attribute
-  alone -- rather than layering `prefers-color-scheme` underneath -- means the
-  toggle and the stylesheet can never disagree about the current theme.
-
-  With JavaScript off nothing stamps the attribute and the page stays light, which
-  is the designed default and the only theme the Figma file contains.
-*/
+/* The explicit attribute lets a saved user choice override the OS preference. */
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
-/*
-  The design tokens, transcribed from the Figma variable set on the landing frame.
-
-  Values are written as literal hex on purpose. The dashboard stores colours as HSL
-  parts and rebuilds them with hsl(), which round-trips lossily -- its own tokens
-  land a shade off the hex in their comments. Tailwind v4 takes the hex directly, so
-  every colour here is byte-exact to the design.
-
-  Names mirror the design's own variable names (Text/Body alt -> text-body-alt) so
-  a spec value maps one-to-one onto a utility class.
-
-  The set is transcribed WHOLE rather than trimmed to what the landing page happens
-  to use, so a later page can reach for a token without re-deriving it from Figma.
-  Several are therefore unreferenced today; that is deliberate, not dead code.
-*/
 @theme {
-  /* Typeface */
   --font-body: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
   --font-heading: 'Radio Canada Big Variable', 'Geist Variable', ui-sans-serif, sans-serif;
 
-  /* Type scale: size + its paired line-height, exactly as the variables define */
   --text-xs: 12px;
   --text-xs--line-height: 16px;
   --text-sm: 14px;
@@ -69,15 +38,13 @@
   --tracking-normal: 0px;
   --tracking-tight: -1px;
 
-  /* Backgrounds */
-  --color-bg-default: #fafafa;
+  --color-bg-default: #ffffff;
   --color-bg-primary: #f5f5f5;
   --color-bg-secondary: #e5e5e5;
   --color-bg-dark: #e5e5e5;
   --color-bg-info: #dbeafe;
   --color-bg-white: #ffffff;
 
-  /* Text */
   --color-header-default: #1f2937;
   --color-header-alt: #374151;
   /* The footer wordmark's own grey at 375. The design gives that one mark three
@@ -93,8 +60,6 @@
   --color-text-success: #16a34a;
   --color-on-solid: #e5e5e5;
 
-  /* Buttons. The two hover fills come from the library's own hover states; the
-     design draws no hover on the placed instances. */
   --color-btn-bg: #262626;
   --color-btn-bg-hover: #404040;
   --color-btn-text: #f5f5f5;
@@ -105,18 +70,15 @@
   --color-btn-border: #00000033;
   --color-btn-tertiary: #262626;
 
-  /* Borders */
   --color-border-default: #d4d4d4;
   --color-border-disabled: #e5e7eb;
   --color-border-info: #3b82f6;
   --color-border-on-bg: #ffffff;
 
-  /* Icons */
   --color-icon-default: #262626;
   --color-icon-alt: #525252;
   --color-icon-success: #00c950;
 
-  /* Palette */
   --color-blue-300: #8ec5ff;
   --color-blue-400: #60a5fa;
   --color-blue-500: #3b82f6;
@@ -124,34 +86,15 @@
   --color-green-500: #22c55e;
   --color-fuchsia-500: #d946ef;
 
-  /* The dashboard section's scrim, the one fill drawn over the artwork. */
   --color-scrim: #00000059;
 
-  /* Radii -- the design uses 4 / 8 / 32 / full */
   --radius-xs: 4px;
   --radius-sm: 8px;
   --radius-lg: 32px;
   --radius-full: 1000px;
 }
 
-/*
-  The dark theme.
-
-  The Figma file contains no dark frame, so this is derived rather than
-  transcribed: the neutral ramp is inverted and the semantic roles are held fixed,
-  so every component keeps working without touching a single utility class. Only
-  the token values change.
-
-  Two rules held the derivation together:
-   - Roles, not literals. `--color-btn-bg` is "the filled button's fill", so it
-     goes light on dark exactly as it goes dark on light.
-   - Text pairs clear WCAG AA against the surface they actually sit on. The muted
-     body grey is the one that decides the page, so it was picked against
-     --color-bg-default rather than against pure black.
-
-  These values want a designer's eye before they ship. They are a working dark
-  mode, not the designed one.
-*/
+/* Dark mode is derived rather than supplied by the design and needs design review. */
 [data-theme='dark'] {
   /* Backgrounds are the exact inverse of their light values -- #fafafa -> #050505,
      #f5f5f5 -> #0a0a0a, #e5e5e5 -> #1a1a1a. That is not tidiness for its own sake.
@@ -168,7 +111,6 @@
   --color-bg-info: #17304f;
   --color-bg-white: #1a1a1a;
 
-  /* Text. Body-alt is #a3a3a3 -> 7.7:1 on the page background. */
   --color-header-default: #f3f4f6;
   --color-header-alt: #e5e7eb;
   --color-header-strong: #f5f5f5;
@@ -181,7 +123,6 @@
   --color-text-success: #4ade80;
   --color-on-solid: #262626;
 
-  /* Buttons invert wholesale: the primary is a light block on a dark page. */
   --color-btn-bg: #ededed;
   --color-btn-bg-hover: #d4d4d4;
   --color-btn-text: #141414;
@@ -199,10 +140,8 @@
   --color-border-info: #60a5fa;
   --color-border-on-bg: #0a0a0a;
 
-  /* Icons */
   --color-icon-default: #ededed;
   --color-icon-alt: #a3a3a3;
-  /* The status green is a signal colour, so it is held across both themes. */
   --color-icon-success: #00c950;
 
   /* The artwork behind the dashboard is a light halftone; dimming it harder is
@@ -210,10 +149,6 @@
   --color-scrim: #000000bf;
 }
 
-/*
-  0.5px borders are a real, load-bearing value in this design system, not a
-  rounding artifact. Tailwind has no preset for it.
-*/
 @utility border-hairline {
   border-width: 0.5px;
 }
@@ -235,10 +170,18 @@
   }
 }
 
+.block-hatch {
+  background-image: repeating-linear-gradient(
+    137.5deg,
+    transparent 0 34px,
+    var(--color-bg-secondary) 34px 36px,
+    transparent 36px 50px
+  );
+}
+
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* The theme swap should not animate, but in-page anchors should glide. */
   scroll-behavior: smooth;
 }
 
@@ -246,6 +189,7 @@ html {
   html {
     scroll-behavior: auto;
   }
+
 }
 
 body {
@@ -254,7 +198,6 @@ body {
   font-family: var(--font-body);
 }
 
-/* Headings use the display face; the design never sets it per-element. */
 h1,
 h2,
 h3,

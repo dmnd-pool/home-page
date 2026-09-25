@@ -1,34 +1,6 @@
 import { cx } from '../lib/cx.js';
 
-/**
- * The skeleton browser window used by every card of the mempool section.
- *
- * All five instances share one structure; what changes is the grey the skeleton
- * takes and which single element is tinted blue. The blue walks through the UI
- * card by card -- first tile, second tile, third tile, then up into the sidebar
- * -- so scrolling the column reads as a tour of the interface.
- *
- * Every stroke is a fraction of a pixel because the whole mockup is the dashboard
- * artwork scaled to 83.2%. The chrome bar's own fill and both panels' white fills
- * are switched off in the design, so the root colour shows through; the blue
- * tile's blue stroke is switched off too.
- *
- * At 375 the design draws this at EXACTLY half size -- every box, gap and stroke
- * weight is 0.5x its desktop value, checked one by one. A transform reproduces
- * that exactly and keeps the sub-pixel strokes in proportion, where re-deriving
- * a second set of numbers would drift. The outer element carries the laid-out
- * size, since a transform does not affect layout.
- *
- * The scale is written as `max-lg:` rather than `scale-50 lg:scale-100`, because
- * even `scale(1)` is still a transform: it promotes the node to its own
- * compositing layer and flips text from subpixel to greyscale antialiasing, which
- * would repaint every glyph in the mockup at 1440. Desktop must carry no
- * transform at all.
- */
-const HAIR = 'var(--color-border-default)';
-
-// Widths of the three sidebar bars, top to bottom.
-const SIDE_BARS = [97, 60, 81];
+const SIDE_BARS = ['w-[97px]', 'w-[60px]', 'w-[81px]'];
 
 export default function BrowserMock({ highlight, tone, className }) {
   const bar = tone === 'light' ? 'bg-bg-primary' : 'bg-bg-secondary';
@@ -37,56 +9,41 @@ export default function BrowserMock({ highlight, tone, className }) {
   return (
     <div
       className={cx(
-        'h-[147.58px] w-[299.52px] max-lg:overflow-hidden lg:h-[295.16px] lg:w-[599.04px]',
+        'h-[148px] w-[300px] max-lg:overflow-hidden lg:h-[296px] lg:w-[600px]',
         className,
       )}
     >
-      <div className="flex h-[295.16px] w-[599.04px] flex-col bg-bg-default max-lg:origin-top-left max-lg:scale-50">
-        {/* chrome bar: fill is off, only its hairline draws */}
-        <div
-          className="flex h-[20.16px] shrink-0 flex-col px-[10.4px] py-2"
-          style={{ boxShadow: `inset 0 0 0 0.208px ${HAIR}` }}
-        >
-          <div className="flex h-[4.16px] gap-[3.744px]">
+      <div className="flex h-[296px] w-[600px] flex-col bg-bg-default max-lg:origin-top-left max-lg:scale-50">
+        <div className="flex h-5 shrink-0 flex-col border-hairline border-border-default px-2.5 py-2">
+          <div className="flex h-1 gap-1">
             {[0, 1, 2].map((i) => (
               <span
                 key={i}
-                className="size-[4.16px] shrink-0 rounded-full bg-text-disabled"
+                className="size-1 shrink-0 rounded-full bg-text-disabled"
                 aria-hidden="true"
               />
             ))}
           </div>
         </div>
 
-        <div className="flex h-[275px]">
-          {/* left panel */}
-          <div
-            className="w-[117px] shrink-0"
-            style={{
-              boxShadow: `inset -0.2px 0 0 0 ${HAIR}, inset 0.2px 0 0 0 ${HAIR}, inset 0 -0.2px 0 0 ${HAIR}`,
-            }}
-          >
-            <div className="mt-[16.84px] ml-[10px] flex w-[97px] flex-col gap-2">
-              {SIDE_BARS.map((w, i) => (
+        <div className="flex h-[276px]">
+          <div className="w-[117px] shrink-0 border-x-[0.5px] border-b-[0.5px] border-border-default">
+            <div className="mt-4 ml-2.5 flex w-[97px] flex-col gap-2">
+              {SIDE_BARS.map((width, i) => (
                 <span
-                  key={w}
-                  className={cx('block h-2', at(`side-${i + 1}`))}
-                  style={{ width: `${w}px` }}
+                  key={width}
+                  className={cx('block h-2', width, at(`side-${i + 1}`))}
                 />
               ))}
             </div>
           </div>
 
-          {/* right panel */}
-          <div
-            className="flex-1"
-            style={{ boxShadow: `inset -0.2px 0 0 0 ${HAIR}, inset 0 -0.2px 0 0 ${HAIR}` }}
-          >
-            <div className="mt-[16.84px] ml-4 flex w-[450px] flex-col gap-[13px]">
+          <div className="flex-1 border-r-[0.5px] border-b-[0.5px] border-border-default">
+            <div className="mt-4 ml-4 flex w-[450px] flex-col gap-3">
               <span className={cx('block h-2 w-[209px]', bar)} />
               <div className="flex h-20 gap-1">
                 {[1, 2, 3].map((i) => (
-                  <span key={i} className={cx('block h-20 w-[147.33px]', at(`tile-${i}`))} />
+                  <span key={i} className={cx('block h-20 flex-1', at(`tile-${i}`))} />
                 ))}
               </div>
             </div>

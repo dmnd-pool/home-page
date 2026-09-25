@@ -33,7 +33,7 @@ const FALLBACK_POSTS = [
   },
 ];
 
-const CARD_COUNT = 3;
+const CARD_COUNT = FALLBACK_POSTS.length;
 
 function CardShell({ children }) {
   return (
@@ -49,8 +49,6 @@ function SkeletonCard() {
       <div className="h-[220px] w-full animate-pulse bg-bg-secondary" />
       <div className="flex flex-col gap-4 p-6">
         <div className="flex flex-col gap-1">
-          {/* Two bars at the heading's own line-height, so the skeleton occupies
-              the same 64px a two-line title will. */}
           <div className="flex h-16 flex-col justify-center gap-2">
             <div className="h-4 w-full animate-pulse bg-bg-secondary" />
             <div className="h-4 w-2/3 animate-pulse bg-bg-secondary" />
@@ -125,9 +123,12 @@ export default function Blog() {
           <span className="font-medium text-header-alt">blog</span>
         </h2>
 
-        <div className="flex flex-col gap-1 lg:col-span-2 lg:row-start-2 lg:flex-row">
+        <div
+          className="flex flex-col gap-1 lg:col-span-2 lg:row-start-2 lg:flex-row"
+          aria-busy={posts === null}
+        >
           {posts === null
-            ? Array.from({ length: CARD_COUNT }, (_, i) => <SkeletonCard key={i} />)
+            ? FALLBACK_POSTS.map((post) => <SkeletonCard key={post.id} />)
             : posts.map((post) => (
                 <PostCard key={post.id} post={post} />
               ))}
