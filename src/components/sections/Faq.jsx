@@ -15,7 +15,7 @@ const ITEMS = [
   },
   {
     q: 'How do payouts work?',
-    a: 'Under PPLNS Payouts happen when a block is found. You can\'t know in advance exactly what each share will pay, but DMND provides a projection, and the system is designed so miners always get their fair share, including fees. The cumulative PPLNS view is at https://platform.dmnd.work/pplns-projection and shows date, hashrate and sats generated per day. More background: https://blog.dmnd.work/understanding-slice-pplns-jd/. FPPS is available if you prefer that.',
+    a: 'Under PPLNS Payouts happen when a block is found. You can\'t know in advance exactly what each share will pay, but DMND provides a projection, and the system is designed so miners always get their fair share, including fees. The cumulative PPLNS view is at https://new-platform.dmnd.work/pplns-projection and shows date, hashrate and sats generated per day. More background: https://blog.dmnd.work/understanding-slice-pplns-jd/. FPPS is available if you prefer that.',
     open: false,
   },
   {

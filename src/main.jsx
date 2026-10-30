@@ -7,6 +7,7 @@ import ApiDocs from './ApiDocs.jsx';
 import SliceDocs from './SliceDocs.jsx';
 import TrustCenter from './TrustCenter.jsx';
 import Terms from './Terms.jsx';
+import NotFound from './NotFound.jsx';
 import Privacy from './Privacy.jsx';
 
 createRoot(document.getElementById('root')).render(
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/trust-center" element={<TrustCenter />} />
         <Route path="/termsofservice" element={<Terms />} />
         <Route path="/privacypolicy" element={<Privacy />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

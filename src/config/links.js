@@ -13,13 +13,13 @@ export const LINKS = {
   blog: `/${anchor(SECTION_IDS.blog)}`,
   apiDocs: '/api',
 
-  startMining: 'https://dashboard.dmnd.work',
-  signIn: 'https://dashboard.dmnd.work',
+  startMining: 'https://new-platform.dmnd.work/signup',
+  signIn: 'https://new-platform.dmnd.work',
   blogIndex: `${BLOG_HOST}/`,
   trustCenter: '/trust-center',
   transparency: 'https://transparency.dmnd.work',
 
-  brokerSignup: 'https://dashboard.dmnd.work/broker',
+  brokerSignup: 'https://new-platform.dmnd.work/broker/signin',
 
   institutions: 'mailto:info@dmnd.work',
 
